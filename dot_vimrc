@@ -1,6 +1,74 @@
-" https://gist.github.com/miguelgrinberg/527bb5a400791f89b3c4da4bd61222e4
-" plugins
-let need_to_install_plugins = 0
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " => Plugins
+  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  set omnifunc=ale#completion#OmniFunc
+  let g:ale_completion_enabled = 1
+  let g:ale_completion_autoimport = 1
+  let g:ale_sign_column_always = 1
+  let g:ale_fix_on_save = 1
+  let g:ale_sign_error = '✗'
+  let g:ale_sign_warning = ''
+  let g:ale_fixers = {
+  \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+  \   'javascript': ['eslint'],
+  \   'typescript': ['eslint','tslint', 'xo'],
+  \   'css': ['stylelint', 'fecs'],
+  \   'rust': ['rustfmt', 'rls'],
+  \}
+  inoremap <silent><expr> <Tab>
+        \ pumvisible() ? "\<C-n>" : "\<TAB>"
+
+  let g:user_emmet_leader_key='<C-/>'
+
+  let g:lightline = {
+      \ 'colorscheme': 'gruvbox',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename', 'modified' ] ]
+      \ ,
+      \   'right': [ [ 'lineinfo' ],
+      \              ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
+      \              [ 'percent' ],
+      \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'filename': 'LightlineFilename',
+      \ },
+      \ 'component_expand': {
+      \  'linter_checking': 'lightline#ale#checking',
+      \  'linter_infos': 'lightline#ale#infos',
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ },
+      \ 'component_type': {
+      \     'linter_checking': 'right',
+      \     'linter_infos': 'right',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'right',
+      \ }
+  \ }
+  let g:lightline = {'colorscheme': 'gruvbox-flat'}
+  let g:lightline#ale#indicator_checking = "\uf110"
+  let g:lightline#ale#indicator_infos = "\uf129"
+  let g:lightline#ale#indicator_warnings = "\uf071"
+  let g:lightline#ale#indicator_errors = "\uf05e"
+  let g:lightline#ale#indicator_ok = "\uf00c"
+  let g:lightline.separator = {
+      \   'left': '', 'right': ''
+  \}
+  let g:lightline.subseparator = {
+      \   'left': '', 'right': ''
+  \}
+  function! LightlineFilename()
+    return expand('%:t') !=# '' ? @% : '[No Name]'
+  endfunction
+
+  let g:fzf_layout = { 'down': '~10%' }
+
+
+
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -8,64 +76,95 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     let need_to_install_plugins = 1
 endif
 
+
+
 call plug#begin('~/.vim/plugged')
 " Sensuble defaults
-Plug 'tpope/vim-sensible'
+"  Plug 'tpope/vim-sensible'
+"  Plug 'neovim/nvim-lsp'
+"  Plug 'neovim/nvim-lspconfig'
+"  Plug 'nvim-lua/completion-nvim'
 
-Plug 'neovim/nvim-lsp'
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
+  " Rust support
+  "Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  "Plug 'rust-lang/rust.vim'
+  Plug 'cespare/vim-toml'
+  Plug 'dense-analysis/ale'
+  Plug 'maximbaz/lightline-ale'
 
-" Rust support
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'rust-lang/rust.vim'
+  " File browser with git indicators
+  Plug 'preservim/nerdtree'
+  Plug 'vim-scripts/The-NERD-tree'
+  Plug 'Xuyuanp/nerdtree-git-plugin'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  Plug 'jistr/vim-nerdtree-tabs'
 
-" File browser with git indicators
-Plug 'preservim/nerdtree'
-Plug 'vim-scripts/The-NERD-tree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  " git indicator in editor
+  Plug 'airblade/vim-gitgutter'
 
-" Tabs
-Plug 'jistr/vim-nerdtree-tabs'
+  " Status bar
+  Plug 'itchyny/lightline.vim'
 
-" git indicator in editor
-Plug 'airblade/vim-gitgutter'
+  " Nord theme
+  " Plug 'arcticicestudio/nord-vim'
 
-" Status bar
-Plug 'itchyny/lightline.vim'
+  " Monokai theme
+  " Plug 'phanviet/vim-monokai-pro'
+  Plug 'morhetz/gruvbox'
 
-" Nord theme
-Plug 'arcticicestudio/nord-vim'
+  " Tabs
+  Plug 'ap/vim-buftabline'
 
-" Tabs
-Plug 'ap/vim-buftabline'
+  " Telescope file finder / picker
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
 
-" Telescope file finder / picker
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
+  " neovim language things
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'neovim/nvim-lspconfig'
 
-" neovim language things
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'neovim/nvim-lspconfig'
-
-" Nicer LSP UI
-Plug 'glepnir/lspsaga.nvim'
+  " Nicer LSP UI
+  Plug 'glepnir/lspsaga.nvim'
 call plug#end()
 
 lua require('lspconfig').tsserver.setup{}
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colors and Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+syntax enable
+set background=dark
+colorscheme gruvbox
+set encoding=utf8
+set ffs=unix,dos,mac
+highlight Normal ctermbg=none
+highlight NonText ctermbg=none
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Files, backups and undo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nobackup
+set nowb
+set noswapfile
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set expandtab
+set smarttab
+set shiftwidth=4
+set tabstop=4
+set lbr
+set tw=500
+set ai
+set si
+set wrap
+
 filetype plugin indent on
 syntax on
-
-if need_to_install_plugins == 1
-    echo "Installing plugins..."
-    silent! PlugInstall
-    echo "Done!"
-    q
-endif
 
 " gfiles shortcut
 nnoremap <C-f> <cmd>Telescope find_files<cr>
@@ -126,7 +225,7 @@ endfunction
 
 " color scheme
 syntax on
-colorscheme nord
+" colorscheme nord
 filetype on
 filetype plugin indent on
 
@@ -294,3 +393,7 @@ for _, lsp in ipairs(servers) do
   }
 end
 EOF
+
+" Start NERDTree and leave the cursor in it.
+autocmd VimEnter * NERDTree
+
