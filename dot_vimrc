@@ -8,23 +8,21 @@
   let g:ale_fix_on_save = 1
   let g:ale_sign_error = '✗'
   let g:ale_sign_warning = ''
+<<<<<<< HEAD
   let g:ale_fixers = {
   \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-  \   'javascript': ['eslint'],
-  \   'typescript': ['eslint','tslint', 'xo'],
-  \   'css': ['stylelint', 'fecs'],
-  \   'rust': ['rustfmt', 'rls'],
+  \   'rust': ['rustfmt'],
   \}
   inoremap <silent><expr> <Tab>
         \ pumvisible() ? "\<C-n>" : "\<TAB>"
 
   let g:user_emmet_leader_key='<C-/>'
 
-  let g:lightline = {
-      \ 'colorscheme': 'gruvbox',
+
+ let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified' ] ]
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified', 'search_status'] ]
       \ ,
       \   'right': [ [ 'lineinfo' ],
       \              ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
@@ -32,7 +30,7 @@
       \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
       \ },
       \ 'component_function': {
-      \   'filename': 'LightlineFilename',
+      \   'gitbranch': 'FugitiveHead'
       \ },
       \ 'component_expand': {
       \  'linter_checking': 'lightline#ale#checking',
@@ -49,18 +47,21 @@
       \     'linter_ok': 'right',
       \ }
   \ }
-  let g:lightline = {'colorscheme': 'gruvbox-flat'}
+
+
+  let g:lightline.colorscheme = 'selenized_black'
+
   let g:lightline#ale#indicator_checking = "\uf110"
   let g:lightline#ale#indicator_infos = "\uf129"
   let g:lightline#ale#indicator_warnings = "\uf071"
   let g:lightline#ale#indicator_errors = "\uf05e"
   let g:lightline#ale#indicator_ok = "\uf00c"
-  let g:lightline.separator = {
-      \   'left': '', 'right': ''
-  \}
-  let g:lightline.subseparator = {
-      \   'left': '', 'right': ''
-  \}
+"  let g:lightline.separator = {
+"      \   'left': '', 'right': ''
+"  \}
+"  let g:lightline.subseparator = {
+"      \   'left': '', 'right': ''
+"  \}
   function! LightlineFilename()
     return expand('%:t') !=# '' ? @% : '[No Name]'
   endfunction
@@ -87,11 +88,27 @@ call plug#begin('~/.vim/plugged')
 
   " Rust support
   "Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  "Plug 'rust-lang/rust.vim'
+  "lug 'rust-lang/rust.vim'
   Plug 'cespare/vim-toml'
   Plug 'dense-analysis/ale'
   Plug 'maximbaz/lightline-ale'
 
+   " Git
+  Plug 'airblade/vim-gitgutter'                                           " Show git diff in number column
+  Plug 'jreybert/vimagit'                                                 " Modal git editing with <leader>g
+  Plug 'tpope/vim-fugitive'                                               " Git plugin with commands 'G<command>'
+
+  " Python
+  Plug 'ambv/black'                                                       " Python code formatter
+  Plug 'tweekmonster/django-plus.vim'                                     " Better django specific support
+  Plug 'vim-python/python-syntax'                                         " Better syntax highlighting for python
+  Plug 'vimjas/vim-python-pep8-indent'                                    " More PEP8 compliant python indentation
+  Plug 'jpalardy/vim-slime', {'for': 'python'}
+
+  " Navigation
+  Plug 'psliwka/vim-smoothie'                                             " Smooth scroll animation instead of jump
+  Plug 'farmergreg/vim-lastplace'                                         " Move cursor to last edit location when reopening
+  "Plug 'terryma/vim-smooth-scroll'
   " File browser with git indicators
   Plug 'preservim/nerdtree'
   Plug 'vim-scripts/The-NERD-tree'
@@ -100,18 +117,15 @@ call plug#begin('~/.vim/plugged')
   Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
   Plug 'jistr/vim-nerdtree-tabs'
 
-  " git indicator in editor
-  Plug 'airblade/vim-gitgutter'
-
   " Status bar
   Plug 'itchyny/lightline.vim'
 
-  " Nord theme
-  " Plug 'arcticicestudio/nord-vim'
-
-  " Monokai theme
-  " Plug 'phanviet/vim-monokai-pro'
+  " Theme
   Plug 'morhetz/gruvbox'
+
+  " Behavior tools
+  Plug 'tpope/vim-sensible'                                               " Sensible vim defaults
+
 
   " Tabs
   Plug 'ap/vim-buftabline'
@@ -127,6 +141,10 @@ call plug#begin('~/.vim/plugged')
 
   " Nicer LSP UI
   Plug 'glepnir/lspsaga.nvim'
+
+  " Git Integration
+  Plug 'airblade/vim-gitgutter'
+
 call plug#end()
 
 lua require('lspconfig').tsserver.setup{}
@@ -142,6 +160,27 @@ set ffs=unix,dos,mac
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Navigation
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:smoothie_enabled = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Gitgutter setting
+" Use fontawesome icons as signs
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_modified = '>'
+let g:gitgutter_sign_removed = '-'
+let g:gitgutter_sign_removed_first_line = '^'
+let g:gitgutter_sign_modified_removed = '<'
+" Jump between hunks
+nmap <Leader>gn <Plug>(GitGutterNextHunk)  " git next
+nmap <Leader>gp <Plug>(GitGutterPrevHunk)  " git previous
+" Hunk-add and hunk-revert for chunk staging
+nmap <Leader>ga <Plug>(GitGutterStageHunk)  " git add (chunk)
+nmap <Leader>gu <Plug>(GitGutterUndoHunk)   " git undo (chunk)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo
@@ -163,6 +202,62 @@ set ai
 set si
 set wrap
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Visual
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Start scrolling when 7 lines from bottom of screen
+set scrolloff=7
+
+" Do not need to show -- Insert --, as lightline handles it already
+set noshowmode
+
+" Relative line numbering
+set number
+"set relativenumber
+
+" Do not show command in bottom bar
+set noshowcmd
+
+" Highlight current line
+set cursorline
+
+" Hide fold numbering in left column
+set foldcolumn=0
+
+" Do not wrap text at the end of the screen
+set nowrap
+
+" Disable line numbering in terminal buffer
+au TermOpen * setlocal nonumber norelativenumber
+
+" Show live substitution results when using :s
+set inccommand=nosplit
+
+" Hide cursorline in inactive window
+augroup CrossHair
+  au!
+  au VimEnter * setlocal cursorline
+  au WinEnter * setlocal cursorline
+  au BufWinEnter * setlocal cursorline
+  au WinLeave * setlocal nocursorline
+augroup end
+
+" Show directory hierarchy in netrw
+let g:netrw_liststyle = 3
+
+" Remove directory banner in netrw
+let g:netrw_banner = 0
+
+" Prevent duplicate netrw buffers (bug caused by vinegar)
+" See: https://codeyarns.com/2015/02/02/cannot-close-buffer-of-netrw-in-vim/
+autocmd FileType netrw setl bufhidden=wipe
+
+" Automatically place help buffer in vertical split layout
+au BufEnter */doc/* if &filetype=='help' | wincmd L | endif
+
+
+
 filetype plugin indent on
 syntax on
 
@@ -177,20 +272,21 @@ set laststatus=2
 set t_Co=256
 set t_ut=
 
-" turn on line numbering
-set number
+
+" make gitgutter more responsive
+set updatetime=250
 
 " sane text files
 set fileformat=unix
-set encoding=utf-8
-set fileencoding=utf-8
+set encoding=utf8
+set fileencoding=utf8
 
 " sane editing
 set expandtab
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set colorcolumn=80
+" set colorcolumn=80
 " set viminfo='25,\"50,n~/.viminfo
 set tw=79
 set autoindent
@@ -206,6 +302,20 @@ nmap <S-Right> w
 nmap <Tab> >>
 imap <S-Tab> <Esc><<i
 nmap <S-tab> <<
+
+let mapleader = " "
+
+" General keyboard mappings
+" reload vim config
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+" RUST
+" For Go To Definition and Find Reference I use F12 and F24.
+" For navigation between the errors I use F11 and F23
+nmap <silent> <F11> <Plug>(ale_previous_wrap)
+nmap <silent> <F23> <Plug>(ale_next_wrap)
+nmap <silent> <F10> :ALEGoToDefinition<CR>
+nmap <silent> <F20> :ALEFindReferences<CR>
 
 " mouse
 set mouse=a
@@ -226,12 +336,9 @@ endfunction
 " color scheme
 syntax on
 " colorscheme nord
-filetype on
-filetype plugin indent on
 
 " lightline
 set noshowmode
-let g:lightline = { 'colorscheme': 'nord' }
 
 " code folding
 "set foldmethod=indent
@@ -270,14 +377,14 @@ function ToggleWrap()
 endfunction
 
 " move through split windows
-nmap <leader><Up> :wincmd k<CR>
-nmap <leader><Down> :wincmd j<CR>
-nmap <leader><Left> :wincmd h<CR>
-nmap <leader><Right> :wincmd l<CR>
+"nmap <leader><Up> :wincmd k<CR>
+"nmap <leader><Down> :wincmd j<CR>
+"nmap <leader><Left> :wincmd h<CR>
+"nmap <leader><Right> :wincmd l<CR>
 
 " move through buffers
-nmap <leader>[ :bp!<CR>
-nmap <leader>] :bn!<CR>
+nmap <leader><Left> :bp!<CR>
+nmap <leader><Right> :bn!<CR>
 nmap <leader>x :bd<CR>
 
 " restore place in file from previous session
@@ -395,5 +502,4 @@ end
 EOF
 
 " Start NERDTree and leave the cursor in it.
-autocmd VimEnter * NERDTree
-
+" autocmd VimEnter * NERDTree

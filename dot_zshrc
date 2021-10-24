@@ -8,7 +8,7 @@
 # https://github.com/gsamokovarov/jump
 # ==============
 
-if [ "$TMUX" = "" ]; then tmux; fi
+#if [ "$TMUX" = "" ]; then tmux; fi
 
 # =============
 #    INIT
@@ -18,13 +18,29 @@ if [ "$TMUX" = "" ]; then tmux; fi
 # It contains GOPATH, some functions, aliases etc...
 [ -r ~/.zsh_private ] && source ~/.zsh_private
 
+typeset -A key
+key[Home]=${terminfo[khome]}
+key[End]=${terminfo[kend]}
+key[Insert]=${terminfo[kich1]}
+key[Delete]=${terminfo[kdch1]}
+key[Up]=${terminfo[kcuu1]}
+key[Down]=${terminfo[kcud1]}
+key[Left]=${terminfo[kcub1]}
+key[Right]=${terminfo[kcuf1]}
+key[PageUp]=${terminfo[kpp]}
+key[PageDown]=${terminfo[knp]}
+
 # =============
 #    ALIAS
 # =============
 alias ..='cd ..'
 
-alias d='git diff' 
+alias d='git diff'
 alias vi='nvim'
+=======
+alias d='git diff'
+alias vi='nvim'
+alias vim='nvim'
 
 case `uname` in
   Darwin)
@@ -34,7 +50,7 @@ case `uname` in
   ;;
   Linux)
     alias ll='ls -al'
-    alias ls='ls --color=auto' 
+    alias ls='ls --color=auto'
   ;;
 esac
 
@@ -47,7 +63,7 @@ alias po='git pull origin $(git rev-parse --abbrev-ref HEAD)'
 # cd into git root dir
 alias cdr='cd $(git rev-parse --show-toplevel)'
 
-# show 
+# show
 alias duh='du -sh -h * .[^.]* 2> /dev/null | sort -h'
 
 # open github repo from git repo
@@ -98,17 +114,20 @@ setopt PUSHDSILENT
 HISTFILE=$HOME/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
+AUTOPUSH=1
+ALWAYS_TO_END=1
+AUTO_MENU=1
 
 setopt append_history
 setopt extended_history
 setopt hist_expire_dups_first
 # ignore duplication command history list
-setopt hist_ignore_dups 
+setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt hist_verify
 setopt inc_append_history
 # share command history data
-setopt share_history 
+setopt share_history
 
 # ===================
 #    PLUGINS
@@ -126,38 +145,22 @@ autoload -U colors && colors
 setopt promptsubst
 
 local ret_status="%(?:%{$fg_bold[green]%}$:%{$fg_bold[green]%}$)"
-PROMPT='${ret_status} %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)'
+PROMPT='${ret_status} %{$fg[cyan]%}%c%{$reset_color%} %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}'
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}git:(%{$fg[green]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[blue]%})%{$reset_color%} "
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}✗"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
 
 # Outputs current branch info in prompt format
 function git_prompt_info() {
   local ref
-  if [[ "$(command git config --get customzsh.hide-status 2>/dev/null)" != "1" ]]; then
-    ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
-    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
-  fi
-}
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
 
-# Checks if working tree is dirty
-function parse_git_dirty() {
-  local STATUS=''
-  local FLAGS
-  FLAGS=('--porcelain')
-
-  if [[ "$(command git config --get customzsh.hide-dirty)" != "1" ]]; then
-    FLAGS+='--ignore-submodules=dirty'
-    STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
-  fi
-
-  if [[ -n $STATUS ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+  if [[ -n $(git status -s --ignore-submodules=dirty 2> /dev/null) ]]; then
+    echo "$ZSH_THEME_GIT_PROMPT_PREFIX$ZSH_THEME_GIT_PROMPT_DIRTY${ref#refs/heads/}$ZSH_THEME_GIT_PROMPT_SUFFIX"
   else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    echo "$ZSH_THEME_GIT_PROMPT_PREFIX$ZSH_THEME_GIT_PROMPT_CLEAN${ref#refs/heads/}$ZSH_THEME_GIT_PROMPT_SUFFIX"
   fi
 }
 
@@ -212,12 +215,12 @@ zstyle ':completion:*' list-dirs-first true
 # ===================
 #    KEY BINDINGS
 # ===================
-# Use emacs-like key bindings by default:
-bindkey -e
+# Use vi-like key bindings by default:
+bindkey -v
 
 # [Ctrl-r] - Search backward incrementally for a specified string. The string
 # may begin with ^ to anchor the search to the beginning of the line.
-bindkey '^r' history-incremental-search-backward      
+bindkey '^r' history-incremental-search-backward
 
 if [[ "${terminfo[khome]}" != "" ]]; then
   bindkey "${terminfo[khome]}" beginning-of-line      # [Home] - Go to beginning of line
@@ -313,9 +316,15 @@ alias -g nv='nvidia-smi'
 #export PATH=$PATH:$GOPATH
 export PICO_SDK_PATH=/home/michael/src/pico/pico-sdk
 export PICO_EXTRAS_PATH=/home/michael/src/pico/pico-extras
-export PATH=$PATH:/opt/cuda/bin
+export PATH=$PATH:/opt/cuda/bin:$HOME/.local/bin:$HOME/.cargo/bin
+export CUDAToolkit_ROOT=/opt/cuda
 
-# Set color coding of directory listing in ls
+ #Set color coding of directory listing in ls
+test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
+
+ #Set color coding of directory listing in ls
 test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
 
 fpath+=${ZDOTDIR:-~}/.zsh_functions
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
