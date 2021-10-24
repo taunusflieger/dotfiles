@@ -37,9 +37,6 @@ alias ..='cd ..'
 
 alias d='git diff'
 alias vi='nvim'
-=======
-alias d='git diff'
-alias vi='nvim'
 alias vim='nvim'
 
 case `uname` in
