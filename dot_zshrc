@@ -141,13 +141,15 @@ source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 autoload -U colors && colors
 setopt promptsubst
 
-local ret_status="%(?:%{$fg_bold[green]%}$:%{$fg_bold[green]%}$)"
-PROMPT='${ret_status} %{$fg[cyan]%}%c%{$reset_color%} %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}'
+# local ret_status="%(?:%{$fg_bold[green]%}$:%{$fg_bold[green]%}$)"
+# PROMPT='${ret_status}'
+PROMPT='%f%b%F{118}%n%F{15}@%F{178}%m %F{64}%1~%f%b '
+PROMPT+='$(git_prompt_info)> '
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}git:(%{$fg[green]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[blue]%})%{$reset_color%} "
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}("
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[white]%})%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}✗"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[white]%}"
 
 # Outputs current branch info in prompt format
 function git_prompt_info() {
@@ -297,7 +299,7 @@ alias gstd='git stash drop'
 alias gstl='git stash list'
 alias gstp='git stash pop'
 alias gsts='git stash save'
-
+alias edge='microsoft-edge-dev'
 alias -g nv='nvidia-smi'
 #export PATH=/usr/local/clang/bin:/usr/local/cuda/bin:/opt/ros/melodic/bin/catkin_make:$PATH
 #export PATH=$HOME/.githubcli/bin:$PATH
@@ -313,11 +315,8 @@ alias -g nv='nvidia-smi'
 #export PATH=$PATH:$GOPATH
 export PICO_SDK_PATH=/home/michael/src/pico/pico-sdk
 export PICO_EXTRAS_PATH=/home/michael/src/pico/pico-extras
-export PATH=$PATH:/opt/cuda/bin:$HOME/.local/bin:$HOME/.cargo/bin
+export PATH=$PATH:/opt/cuda/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/scripts
 export CUDAToolkit_ROOT=/opt/cuda
-
- #Set color coding of directory listing in ls
-test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
 
  #Set color coding of directory listing in ls
 test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
@@ -325,3 +324,6 @@ test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+eval "$(jump shell)"
+#[ -z "$TMUX"  ] && { tmux attach || exec tmux new-session && exit;}
