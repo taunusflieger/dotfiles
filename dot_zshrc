@@ -1,14 +1,31 @@
 # =============
 # Requires the following plugins installed in /usr/local/shared
-# https://github.com/zsh-users/zsh-history-substring-search
-# https://github.com/zsh-users/zsh-syntax-highlighting
-# https://github.com/zsh-users/zsh-autosuggestions
+# git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf ~/.fzf/install
 #
-# Jump needs to be installed
-# https://github.com/gsamokovarov/jump
-# ==============
 
 #if [ "$TMUX" = "" ]; then tmux; fi
+
+# ========================
+# Check / prep environment
+# install plugins
+# ========================
+mkdir -p $HOME/.local/bin/zsh-plugins
+if [[ ! -d "$HOME/.local/bin/zsh-plugins/zsh-history-substring-search" ]] ; then
+    git clone  https://github.com/zsh-users/zsh-history-substring-search $HOME/.local/bin/zsh-plugins/zsh-history-substring-search
+fi
+if [[ ! -d "$HOME/.local/bin/zsh-plugins/zsh-syntax-highlighting" ]] ; then
+    git clone  https://github.com/zsh-users/zsh-syntax-highlighting $HOME/.local/bin/zsh-plugins/zsh-syntax-highlighting
+fi
+if [[ ! -d "$HOME/.local/bin/zsh-plugins/zsh-autosuggestions" ]] ; then
+    git clone  https://github.com/zsh-users/zsh-autosuggestions $HOME/.local/bin/zsh-plugins/zsh-autosuggestions
+fi
+
+# ===================
+#    PLUGINS
+# ===================
+source $HOME/.local/bin/zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.local/bin/zsh-plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $HOME/.local/bin/zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # =============
 #    INIT
@@ -36,8 +53,6 @@ key[PageDown]=${terminfo[knp]}
 alias ..='cd ..'
 
 alias d='git diff'
-alias vi='nvim'
-alias vim='nvim'
 
 case `uname` in
   Darwin)
@@ -73,6 +88,8 @@ alias b='git branch'
 # ----------------------
 # Git log find by commit message
 function glf() { git log --all --grep="$1"; }
+
+function hgrep() { fc -Dlim "*$@*" 1 }
 
 # # open seperate tmux buffer and search for a file, open with vim
 # function fe() (
@@ -125,15 +142,6 @@ setopt hist_verify
 setopt inc_append_history
 # share command history data
 setopt share_history
-
-# ===================
-#    PLUGINS
-# ===================
-
-# These are installed via github.com/fatih/dotfiles/Brewfile
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # =============
 #    PROMPT
@@ -219,7 +227,7 @@ bindkey -v
 
 # [Ctrl-r] - Search backward incrementally for a specified string. The string
 # may begin with ^ to anchor the search to the beginning of the line.
-bindkey '^r' history-incremental-search-backward
+# bindkey '^r' history-incremental-search-backward
 
 if [[ "${terminfo[khome]}" != "" ]]; then
   bindkey "${terminfo[khome]}" beginning-of-line      # [Home] - Go to beginning of line
@@ -321,9 +329,17 @@ export CUDAToolkit_ROOT=/opt/cuda
  #Set color coding of directory listing in ls
 test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
 
+# Format time output
+export TIMEFMT=$'\n================\nCPU\t%P\nuser\t%*U\nsystem\t%*S\ntotal\t%*E'
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-eval "$(jump shell)"
-#[ -z "$TMUX"  ] && { tmux attach || exec tmux new-session && exit;}
+#eval "$(jump shell)"
+export TERM=xterm-256color
+# Temp settings for NVIDA Jetson Kernel build
+export CROSS_COMPILE=$HOME/l4t-gcc/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
+export LOCALVERSION=-tegra
+export TEGRA_KERNEL_OUT=$HOME/jetson_nano_kernel
+
+#[ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit;}
