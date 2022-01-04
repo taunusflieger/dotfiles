@@ -20,9 +20,14 @@ return require('packer').startup {
 
   use 'lewis6991/impatient.nvim'
 
-  -- Rust support
+  --  Collection of common configurations for the Nvim LSP client
   use 'neovim/nvim-lspconfig'
-  
+ 
+  use 'rust-lang/rust.vim'
+
+  -- To enable more of the features of rust-analyzer, such as inlay hints and more!
+  use 'simrat39/rust-tools.nvim'
+
   -- Completion framework
   -- see https://sharksforarms.dev/posts/neovim-rust/
   use 'hrsh7th/nvim-cmp'
@@ -33,11 +38,13 @@ return require('packer').startup {
   -- Snippet completion source for nvim-cmp
   use 'hrsh7th/cmp-vsnip'
 
+  -- Snippet engine
+  use 'hrsh7th/vim-vsnip'
+
   -- Other usefull completion sources
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-buffer'
 
-  use 'simrat39/rust-tools.nvim'
   -- Debugging
   use 'mfussenegger/nvim-dap'
 
@@ -81,7 +88,18 @@ return require('packer').startup {
   -- use 'itchyny/lightline.vim'
 
   -- Theme
-  use 'morhetz/gruvbox'
+  -- use 'morhetz/gruvbox'
+  --use 'arcticicestudio/nord-vim'
+  use 'navarasu/onedark.nvim'
+
+  -- treesitter information
+  use 'nvim-treesitter/playground'
+
+  -- Highlighting
+  use {
+        'nvim-treesitter/nvim-treesitter',
+        run = ':TSUpdate'
+  }
 
   -- Fuzzy finder
   use 'junegunn/fzf'
@@ -101,6 +119,9 @@ return require('packer').startup {
 
   -- Smooth scrolling
   use 'karb94/neoscroll.nvim'
+
+  -- Color highlighting
+  use 'norcalli/nvim-colorizer.lua'
 
 end,
 

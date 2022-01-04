@@ -63,7 +63,6 @@ opt.laststatus = 2                  -- Allways sho status line
 opt.encoding = 'utf8'
 opt.fileformat = 'unix'
 opt.mouse = 'a'                     -- Enable mouse scrolling
-cmd 'colorscheme gruvbox'
 
 
 -----------------------------------------------------------
@@ -95,4 +94,11 @@ nmap('<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>")
 nmap('<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>")
 nmap('<leader>ft', "<cmd>lua require('telescope.builtin').git_files()<cr>")
 nmap('<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>")
+
+-----------------------------------------------------------
+-- Rust
+-----------------------------------------------------------
+--- Show all diagnostics on current line in floating window
+nmap('<leader>d', "<cmd>lua vim.diagnostic.open_float()<CR>")
+nmap('<leader>a', "<cmd>lua vim.lsp.buf.code_action()<CR>")
 
