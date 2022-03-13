@@ -82,9 +82,12 @@ map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})
 map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
 
 -- move through buffers
-nmap('<leader><Left>', '<cmd>bp!<cr>')
-nmap('<leader><Right>', '<cmd>bn!<cr>')
+nmap('<leader>h', '<cmd>bp!<cr>')
+nmap('<leader>l', '<cmd>bn!<cr>')
 nmap('<leader>x', '<cmd>bd<cr>')
+
+-- NvimTree
+nmap('<leader>n', '<cmd>NvimTreeToggle<cr>')
 
 -----------------------------------------------------------
 -- Telescope functions

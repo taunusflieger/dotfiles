@@ -38,10 +38,39 @@ require('settings')
 require('keymappings')
 require('neoscroll').setup()
 
-vim.g.onedark_disable_terminal_colors = true
-vim.g.onedark_style = 'deep'
-vim.g.onedark_italic_comment = false
-require('onedark').setup()
+require('onedark').setup  {
+    -- Main options --
+    style = 'deep', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+    transparent = false,  -- Show/hide background
+    term_colors = true, -- Change terminal color as per the selected theme style
+    ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
+    -- toggle theme style ---
+    toggle_style_key = '<leader>ts', -- Default keybinding to toggle
+    toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
+
+    -- Change code style ---
+    -- Options are italic, bold, underline, none
+    -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
+    code_style = {
+        comments = 'italic',
+        keywords = 'none',
+        functions = 'none',
+        strings = 'none',
+        variables = 'none'
+    },
+
+    -- Custom Highlights --
+    colors = {}, -- Override default colors
+    highlights = {}, -- Override highlight groups
+
+    -- Plugins Config --
+    diagnostics = {
+        darker = true, -- darker colors for diagnostic
+        undercurl = true,   -- use undercurl instead of underline for diagnostics
+        background = true,    -- use background color for virtual text
+    },
+}
+require('onedark').load()
 
 require('lualine').setup {
   options = {
@@ -74,6 +103,10 @@ require('lualine').setup {
 }
 
 -- Rust Settings
+local extension_path = '/home/michael/.vscode/extensions/vadimcn.vscode-lldb-1.6.8/'
+local codelldb_path = extension_path .. 'adapter/codelldb'
+local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
+
 local opts = {
     tools = { -- rust-tools options
         -- Automatically set inlay hints (type hints)
@@ -83,9 +116,9 @@ local opts = {
         -- This overrides the default hover handler 
         hover_with_actions = true,
 
-		-- how to execute terminal commands
-		-- options right now: termopen / quickfix
-		executor = require("rust-tools/executors").termopen,
+        -- how to execute terminal commands
+        -- options right now: termopen / quickfix
+        executor = require("rust-tools/executors").termopen,
 
         runnables = {
             -- whether to use telescope for selection menu or not
@@ -175,28 +208,16 @@ local opts = {
     -- these override the defaults set by rust-tools.nvim
     -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
     server = {
-        -- on_attach is a callback called when the language server attachs to the buffer
-        -- on_attach = on_attach,
-        settings = {
-            -- to enable rust-analyzer settings visit:
-            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-            ["rust-analyzer"] = {
-                -- enable clippy on save
-                checkOnSave = {
-                    command = "clippy"
-                },
-            }
-        }
+      -- standalone file support
+      -- setting it to false may improve startup timestandalone
+      standalone = true,
     }, -- rust-analyer options
 
     -- debugging stuff
     dap = {
-        adapter = {
-            type = 'executable',
-            command = 'lldb-vscode',
-            name = "rt_lldb"
+      adapter = require('rust-tools.dap').get_codelldb_adapter(
+            codelldb_path, liblldb_path)
         }
-    }
 }
 
 require('rust-tools').setup(opt)
@@ -221,11 +242,11 @@ require('rust-tools.hover_actions').hover_actions()
 local cmp = require('cmp')
 cmp.setup {
   -- Enable LSP snippets
-  snippet = {
-    expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
-    end,
-  },
+--  snippet = {
+--    expand = function(args)
+--        vim.fn["vsnip#anonymous"](args.body)
+--    end,
+--  },
   mapping = {
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
@@ -245,7 +266,6 @@ cmp.setup {
   -- Installed sources
   sources = {
     { name = 'nvim_lsp' },
-    { name = 'vsnip' },
     { name = 'path' },
     { name = 'buffer' },
   },
@@ -275,6 +295,96 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 -- nnoremap <silent> g[ <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
 --nnoremap <silent> g] <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
 
+-- following options are the default
+-- each of these are documented in `:help nvim-tree.OPTION_NAME`
+require'nvim-tree'.setup {
+  disable_netrw        = false,
+  hijack_netrw         = true,
+  open_on_setup        = false,
+  ignore_buffer_on_setup = false,
+  ignore_ft_on_setup   = {},
+  auto_close           = false,
+  auto_reload_on_write = true,
+  open_on_tab          = false,
+  hijack_cursor        = false,
+  update_cwd           = false,
+  hijack_unnamed_buffer_when_opening = false,
+  hijack_directories   = {
+    enable = true,
+    auto_open = true,
+  },
+  diagnostics = {
+    enable = false,
+    icons = {
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
+    }
+  },
+  update_focused_file = {
+    enable      = false,
+    update_cwd  = false,
+    ignore_list = {}
+  },
+  system_open = {
+    cmd  = nil,
+    args = {}
+  },
+  filters = {
+    dotfiles = false,
+    custom = {}
+  },
+  git = {
+    enable = true,
+    ignore = true,
+    timeout = 500,
+  },
+  view = {
+    width = 30,
+    height = 30,
+    hide_root_folder = false,
+    side = 'left',
+    preserve_window_proportions = false,
+    mappings = {
+      custom_only = false,
+      list = {}
+    },
+    number = false,
+    relativenumber = false,
+    signcolumn = "yes"
+  },
+  trash = {
+    cmd = "trash",
+    require_confirm = true
+  },
+  actions = {
+    change_dir = {
+      enable = true,
+      global = false,
+    },
+    open_file = {
+      quit_on_open = false,
+      resize_window = false,
+      window_picker = {
+        enable = true,
+        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+        exclude = {
+          filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame", },
+          buftype  = { "nofile", "terminal", "help", },
+        }
+      }
+    }
+  },
+  log = {
+    enable = false,
+    types = {
+      all = false,
+      config = false,
+      git = false,
+    },
+  },
+}
 
 -- Telescope configuration
 require('telescope').setup{
