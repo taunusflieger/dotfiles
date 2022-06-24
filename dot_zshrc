@@ -19,7 +19,10 @@ fi
 if [[ ! -d "$HOME/.local/bin/zsh-plugins/zsh-autosuggestions" ]] ; then
     git clone  https://github.com/zsh-users/zsh-autosuggestions $HOME/.local/bin/zsh-plugins/zsh-autosuggestions
 fi
-
+if [[ ! -d "/usr/share/zsh/plugins/zsh-vi-mode" ]] ; then
+    yay -S zsh-vi-mode
+fi
+#source /usr/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 # ===================
 #    PLUGINS
 # ===================
@@ -81,7 +84,7 @@ alias duh='du -sh -h * .[^.]* 2> /dev/null | sort -h'
 # open github repo from git repo
 alias hb='gh repo view --web'
 alias b='git branch'
-
+alias icat="kitty +kitten icat"
 
 # ----------------------
 # Git Functions
@@ -321,10 +324,18 @@ alias -g nv='nvidia-smi'
 #export CXX=/usr/bin/gcc
 #export GOPATH=~/go
 #export PATH=$PATH:$GOPATH
-export PICO_SDK_PATH=/home/michael/src/pico/pico-sdk
+export PYENV_ROOT=$HOME/.pyenv
+export PATH=$PATH:$PYENV_ROOT/bin
+#export PICO_SDK_PATH=/home/michael/Arduino/hardware/pico/rp2040/pico-sdk
+#export PICO_EXTRAS_PATH=/home/michael/Arduino/hardware/pico/rp2040/pico-extras
 export PICO_EXTRAS_PATH=/home/michael/src/pico/pico-extras
-export PATH=$PATH:/opt/cuda/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/scripts
+export PICO_SDK_PATH=/home/michael/src/pico/pico-sdk
+export PATH=$PATH:/opt/cuda/bin:/opt/vivaldi:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/scripts
 export CUDAToolkit_ROOT=/opt/cuda
+
+# Fix bug in Arduino 1.x IDE when running under swaywm
+export _JAVA_AWT_WM_NONREPARENTING=1 
+
 
  #Set color coding of directory listing in ls
 test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
@@ -341,5 +352,12 @@ export TERM=xterm-256color
 export CROSS_COMPILE=$HOME/l4t-gcc/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
 export LOCALVERSION=-tegra
 export TEGRA_KERNEL_OUT=$HOME/jetson_nano_kernel
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
+export QT_SCALE_FACTOR=1.3
 
 #[ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit;}
+eval "$(pyenv init -)"
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

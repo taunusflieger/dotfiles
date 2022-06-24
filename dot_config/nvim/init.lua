@@ -297,13 +297,12 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 
 -- following options are the default
 -- each of these are documented in `:help nvim-tree.OPTION_NAME`
-require'nvim-tree'.setup {
+require('nvim-tree').setup {
   disable_netrw        = false,
   hijack_netrw         = true,
   open_on_setup        = false,
   ignore_buffer_on_setup = false,
   ignore_ft_on_setup   = {},
-  auto_close           = false,
   auto_reload_on_write = true,
   open_on_tab          = false,
   hijack_cursor        = false,
@@ -400,7 +399,8 @@ require('colorizer').setup()
 -- treesitter configuration
 require('nvim-treesitter.configs').setup {
  -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-  ensure_installed = "maintained",
+  ensure_installed = { "c", "cpp", "python", "lua", "rust" },
+
 
   -- Install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,

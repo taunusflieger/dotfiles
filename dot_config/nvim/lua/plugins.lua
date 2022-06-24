@@ -39,7 +39,7 @@ return require('packer').startup {
   use 'hrsh7th/cmp-vsnip'
 
   -- Snippet engine
-  use 'hrsh7th/vim-vsnip'
+use 'hrsh7th/vim-vsnip'
 
   -- Other usefull completion sources
   use 'hrsh7th/cmp-path'
@@ -119,7 +119,7 @@ return require('packer').startup {
       requires = {
         'kyazdani42/nvim-web-devicons', -- optional, for file icon
       },
-      config = function() require'nvim-tree'.setup {} end
+--      config = function() require'nvim-tree'.setup {} end
   }
   
 -- Nicer LSP UI
