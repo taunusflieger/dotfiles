@@ -1,147 +1,108 @@
-_ = vim.cmd [[packadd packer.nvim]]
-_ = vim.cmd [[packadd vimball]]
-
-local has = function(x)
-  return vim.fn.has(x) == 1
-end
-
-local executable = function(x)
-  return vim.fn.executable(x) == 1
-end
-
-return require('packer').startup {
-  function(use)
-
-  
-
-
+require("packer").startup(function(use)
   -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
+  use("wbthomason/packer.nvim")
 
-  use 'lewis6991/impatient.nvim'
+  -- =====================
+  -- UI STUFF
+  -- =====================
+  -- Top buffer/tab line
+  use("akinsho/nvim-bufferline.lua")
+  -- Dracula
+  use({ "Mofiqul/dracula.nvim", as = "dracula" })
+  -- use({ "darker-dracula/vim", as = "dracula" })
+  -- use("~/dev/darker-dracula/vim")
+  -- Git in the gutter
+  use("lewis6991/gitsigns.nvim")
+  -- dev-icons
+  use("kyazdani42/nvim-web-devicons")
+  -- UI stuff (mainly used for lsp overrides)
+  use("RishabhRD/popfix")
+  use("RishabhRD/nvim-lsputils")
+  -- Trouble
+  use("folke/trouble.nvim")
+  -- Colorizer
+  use("norcalli/nvim-colorizer.lua")
+  -- indent lines
+  use("lukas-reineke/indent-blankline.nvim")
+  -- statusline
+  use({ "famiu/feline.nvim" })
 
-  --  Collection of common configurations for the Nvim LSP client
-  use 'neovim/nvim-lspconfig'
- 
-  use 'rust-lang/rust.vim'
+  use("tpope/vim-scriptease")
 
-  -- To enable more of the features of rust-analyzer, such as inlay hints and more!
-  use 'simrat39/rust-tools.nvim'
+  -- =====================
+  -- TELESCOPE
+  -- =====================
+  use({
+    "nvim-telescope/telescope.nvim",
+    requires = { { "nvim-lua/plenary.nvim" }, { "nvim-lua/popup.nvim" } },
+  })
+  use({
+    "romgrk/fzy-lua-native",
+    requires = { { "nvim-telescope/telescope.nvim" } },
+  })
+  use({
+    "nvim-telescope/telescope-fzy-native.nvim",
+    requires = { { "nvim-telescope/telescope.nvim" } },
+  })
 
-  -- Completion framework
-  -- see https://sharksforarms.dev/posts/neovim-rust/
-  use 'hrsh7th/nvim-cmp'
+  -- =====================
+  -- Coding stuff
+  -- =====================
+  -- lsp stuff
+  use("neovim/nvim-lspconfig")
 
-  -- LSP completion source for nvim-cmp
-  use 'hrsh7th/cmp-nvim-lsp'
+  -- completion plugin
+  use("hrsh7th/nvim-cmp")
+  use("hrsh7th/cmp-nvim-lsp")
+  use("hrsh7th/cmp-buffer")
+  use("hrsh7th/cmp-vsnip")
+  use("hrsh7th/cmp-emoji")
 
-  -- Snippet completion source for nvim-cmp
-  use 'hrsh7th/cmp-vsnip'
+  use("L3MON4D3/LuaSnip")
 
-  -- Snippet engine
-use 'hrsh7th/vim-vsnip'
+  use("williamboman/nvim-lsp-installer")
 
-  -- Other usefull completion sources
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-buffer'
-
+  -- tree-sitter
+  use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
+  use("nvim-treesitter/playground")
+  use("windwp/nvim-ts-autotag")
+  use("JoosepAlviste/nvim-ts-context-commentstring")
+  -- Lua dev
+  use("folke/lua-dev.nvim")
+  use("ckipp01/stylua-nvim")
+  -- snippets
+  use("hrsh7th/vim-vsnip")
+  -- Ranger
+  use({ "kevinhwang91/rnvimr", run = ":make sync" })
+  -- Comment stuff out
+  use("tpope/vim-commentary")
+  -- Set root directory properly
+  use("airblade/vim-rooter")
+  -- Show a popup with signature info
+  use("ray-x/lsp_signature.nvim")
   -- Debugging
-  use 'mfussenegger/nvim-dap'
+  use("mfussenegger/nvim-dap")
+  use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
+  -- idk
+  use("jose-elias-alvarez/null-ls.nvim")
+  use("jose-elias-alvarez/nvim-lsp-ts-utils")
+  -- rust
+  use("simrat39/rust-tools.nvim")
 
-
-  -- 'neoclide/coc.nvim', {'branch': 'release'}
-  -- 'rust-lang/rust.vim'
-  -- use 'cespare/vim-toml'
-  -- use 'dense-analysis/ale'
-  -- use 'maximbaz/lightline-ale'
-
-  -- Git
-  use 'airblade/vim-gitgutter'                                            -- Show git diff in number column
-  use 'jreybert/vimagit'                                                 -- Modal git editing with <leader>g
-  use 'tpope/vim-fugitive'                                               -- Git plugin with commands 'G<command>'
-  use 'github/copilot.vim'
-
-  -- Python
-  use 'ambv/black'                                                       -- Python code formatter
-  use 'tweekmonster/django-plus.vim'                                     -- Better django specific support
-  use 'vim-python/python-syntax'                                         -- Better syntax highlighting for python
-  use 'vimjas/vim-python-pep8-indent'                                    -- More PEP8 compliant python indentation
-  -- use 'jpalardy/vim-slime', {'for': 'python'}
-
-  -- Navigation
-  use 'farmergreg/vim-lastplace'                                         -- Move cursor to last edit location when reopening
-  --use 'terryma/vim-smooth-scroll'
-  -- File browser with git indicators
-  --use 'preservim/nerdtree'
-  --use 'vim-scripts/The-NERD-tree'
-  --use 'Xuyuanp/nerdtree-git-plugin'
-  use 'ryanoasis/vim-devicons'
-  --use 'tiagofumo/vim-nerdtree-syntax-highlight'
-  --use 'jistr/vim-nerdtree-tabs'
-
-  -- Status bar
-  use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-  }
-
-  -- use 'itchyny/lightline.vim'
-
-  -- Theme
-  -- use 'morhetz/gruvbox'
-  -- use 'arcticicestudio/nord-vim'
-  -- use 'navarasu/onedark.nvim'
-  use 'folke/tokyonight.nvim'
- 
-  -- treesitter information
-  use 'nvim-treesitter/playground'
-
-  -- Highlighting
-  use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
-  }
-
-  -- Fuzzy finder
-  use 'junegunn/fzf'
-
-  -- Hydra
-  use { 'anuvyklack/hydra.nvim', 
-    requires = 'anuvyklack/keymap-layer.nvim' -- needed only for pink hydras
-  }
-
-  -- Tabs
-  use 'ap/vim-buftabline'
-
-  -- Telescope file finder / picker
-  use 'nvim-lua/popup.nvim'
-  use 'nvim-lua/plenary.nvim'
-  use 'nvim-telescope/telescope.nvim'
-  use { "nvim-telescope/telescope-fzf-native.nvim", run = "make" }
-
-  -- File browser
-  use {
-      'kyazdani42/nvim-tree.lua',
-      requires = {
-        'kyazdani42/nvim-web-devicons', -- optional, for file icon
-      },
---      config = function() require'nvim-tree'.setup {} end
-  }
-  
--- Nicer LSP UI
-  use 'glepnir/lspsaga.nvim'
-
-  -- Smooth scrolling
-  use 'karb94/neoscroll.nvim'
-
-  -- Color highlighting
-  use 'norcalli/nvim-colorizer.lua'
-
-end,
-
- config = {
-    -- Move to lua dir so impatient.nvim can cache it
-    compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua'
-  },
-
-}
+  -- =====================
+  -- OTHERS
+  -- =====================
+  -- Pairs ()
+  use("windwp/nvim-autopairs")
+  -- Startify
+  use("mhinz/vim-startify")
+  -- Which key
+  use("liuchengxu/vim-which-key")
+  -- git
+  use("tpope/vim-fugitive")
+  use("antoinemadec/FixCursorHold.nvim")
+  -- file trees
+  use("kyazdani42/nvim-tree.lua")
+  -- tpope
+  use("tpope/vim-surround")
+end)
