@@ -89,9 +89,10 @@ use 'hrsh7th/vim-vsnip'
 
   -- Theme
   -- use 'morhetz/gruvbox'
-  --use 'arcticicestudio/nord-vim'
-  use 'navarasu/onedark.nvim'
-
+  -- use 'arcticicestudio/nord-vim'
+  -- use 'navarasu/onedark.nvim'
+  use 'folke/tokyonight.nvim'
+ 
   -- treesitter information
   use 'nvim-treesitter/playground'
 
@@ -103,6 +104,11 @@ use 'hrsh7th/vim-vsnip'
 
   -- Fuzzy finder
   use 'junegunn/fzf'
+
+  -- Hydra
+  use { 'anuvyklack/hydra.nvim', 
+    requires = 'anuvyklack/keymap-layer.nvim' -- needed only for pink hydras
+  }
 
   -- Tabs
   use 'ap/vim-buftabline'

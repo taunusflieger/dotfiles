@@ -1,0 +1,320 @@
+# Most Important
+ 
+| :-10,-4t.
+| :g/PAT1/s/PAT2/REPL/g , :g/PAT1/s//REPL/g
+| :BCommits
+| :GFiles?
+| :History                           | v:oldfiles and open buffers    |
+| :History:                          | Command history                |
+| :History/                          | Search history                 |
+| earlier / later
+| :echo getcompletion('vim.', 'lua') | get completion for lua command |
+| =execute('messages') | After running this register, paste!|
+ 
+ 
+| =============            |                                                |
+| G commands               |                                                |
+| =============            |                                                |
+| g<                       | reprint last command's output                  |
+| g&                       | replay the last substitution                   |
+ 
+| :vimgrep /666/ %         | Populate from arg list                         |
+| :vimgrepa                | works the same as vimgrep but appends          |
+|                          | its matches to the end of the existing         |
+|                          | quickfix list, instead of pushing a new        |
+|                          | quickfix list.                                 |
+| :cnf                     | Go to the first error in the next file         |
+| :.cc                     | Go to error under cursor (if cursor is         |
+|                          | in quickfix window)                            |
+|                          |                                                |
+ 
+| =============            |                                                |
+| Text Objects             |                                                |
+| =============            |                                                |
+| d2ic                     | deletes 2 parentheses                          |
+| d2Ic                     | deletes 2 parentheses, excluding the spaces    |
+|                          |                                                |
+ 
+| =============            |                                                |
+| Completion               |                                                |
+| =============            |                                                |
+| <C-h>                    | Move left                                      |
+| <C-l>                    | Move right                                     |
+| <C-n>                    | Generic keyword                                |
+| <C-x><C-n>               | Generic buffer keyword                         |
+| <C-x><C-k>               | Dictionary                                     |
+| <C-x><C-s>               | Fix spelling                                   |
+|                          |                                                |
+| =============            |                                                |
+| Case Conversion          |                                                |
+| =============            |                                                |
+| gsm or gsp               | MixedCase or PascalCase                        |
+| gsc                      | camelCase                                      |
+| gs_                      | snake_case                                     |
+| gsu or gsU               | UPPER_CASE                                     |
+| gst                      | Title Case                                     |
+| gs<space>                | space case                                     |
+| gs- or gsk               | dash-case or kebab-case                        |
+| gsK                      | Title-Dash/ Title-Kebab                        |
+| gs.                      | dot.case                                       |
+|                          |                                                |
+| =============            |                                                |
+| Navigation               |                                                |
+| =============            |                                                |
+| }[  }]                   | Comment                                        |
+|                          |                                                |
+| =============            |                                                |
+| Marks                    |                                                |
+| =============            |                                                |
+| m/                       | Open mark list                                 |
+| m-                       | Delete marks of the line                       |
+| '., `.                   | Position where last change was made.           |
+| :delmarks a,b,f          |                                                |
+| ]`  [`                   | Jump to the next/previous mark                 |
+| '[, `[                   | First line or character of previously          |
+|                          | changed or yanked text.                        |
+| '], `]                   | Last line or character of previously           |
+|                          | changed or yanked text.                        |
+| '", `"                   | Position when last exiting the current buffer. |
+| '^, `^                   | Position where last insertion stopped.         |
+| '(, `(                   | Start of current sentence.                     |
+| '), `)                   | End of current sentence.                       |
+| '{, `{                   | Start of current paragraph.                    |
+| '}, `}                   | End of current paragraph.                      |
+|                          |                                                |
+| =============            |                                                |
+| Searching                |                                                |
+| =============            |                                                |
+| :%s/cats/"&"/g           | Reuse search term                              |
+| ctrl-g / ctrl-t          | Jumps to the next/prev occurrence of the       |
+|                          | pattern, but keeps focus in the command line   |
+| /<C-r><C-w>              | Put the current word into search               |
+| /term1/;/term2/;/term3   | Chaining search                                |
+| :g/searchterm/yank A     | search for the term, and put it in the a       |
+|                          | register (register name should be capital,     |
+|                          | otherwise the last item is put there)          |
+| :g/term/t$               | search for the term, and copy them at the      |
+|                          | end of the buffer                              |
+| bufdo /searchstr/        | use :rewind to recommence search               |
+| /begin\_.*end            | search over possible multiple lines            |
+| :/^foo/,$delete          | From the next line that starts with "foo"      |
+|                          | to the end.                                    |
+| :/^foo/+1,$delete        | From the line after the line that starts       |
+|                          | with "foo" to the end.                         |
+| :/foo//bar//quux/d       | This would delete the first line containing    |
+|                          | "quux" after the first line containing         |
+|                          | "bar" after the first line containing          |
+|                          | "foo" after the current line.                  |
+| :g/match/y A             | will yank all lines containing "match" into    |
+|                          | the "a/@a register.                            |
+| :g/one/v/two/d           | finds lines that contain "one", not "two"      |
+| :v/search pattern/d      | Delete all lines not containing the pattern    |
+| 3/joe/e+1                | find 3rd joe cursor set to End of match + 1    |
+| /joe/s-2                 | cursor set to Start of match minus 2           |
+| /joe/+3                  | find joe move cursor 3 lines down              |
+| /^\n\{3}                 | find 3 empty lines                             |
+| g/gladiolli/#            | display with line numbers                      |
+| g/fred.*joe.*dick/       | display all lines fred,joe & dick              |
+| :g/^\s*$/d               | delete all blank lines                         |
+| :g/^Err/ . w >> err.txt  | filter lines to a file                         |
+|                          |                                                |
+| =============            |                                                |
+| Editing                  |                                                |
+| =============            |                                                |
+| =%                       | reformat in a block of code                    |
+| 5>>                      | Indent current and next 4 lines                |
+| :9y , :+9y               | Yanks the line at 9, or next 9 line!           |
+| :9m16                    | Move the line at 9 to line 16!                 |
+| :2,9m16 , :-2,+3m10      | Move lines 2 to 9 to line 16!                  |
+| :9d                      | Delete the line at 9                           |
+| :3,'xdelete              | Lines 3 to the line marked by mark x.          |
+| Assuming on line 5       | :1,+1d would delete lines 1 to 6, whereas      |
+|                          | :1;+1d would only delete lines 1 and 2.        |
+| :let @p='<CTRL-R>p'      | To paste the content of the register,          |
+|                          | then edit it and set it                        |
+| ab smt Something long    | Add a new abbreviation!                        |
+| :20d_, :20da             | delete into register                           |
+| (insert) <M-a>           | insert last inserted text.                     |
+| :c                       | Replace pattern                                |
+|                          |                                                |
+| :let @" = expand("%")>   | copy the file name to the unamed register      |
+| ]p                       | Pastes and reindents!                          |
+|                          |                                                |
+| :v/./,/./-j              | compress empty lines                           |
+| gw                       | Format and wrap. Keep your cursor where it     |
+|                          | is when done.                                  |
+| g~~                      | flip case line                                 |
+| ggguG                    | lowercase entire file                          |
+|                          |                                                |
+| :[range]delete [x]       | Delete specified lines [into register x]       |
+| :[range]yank [x]         | Yank specified lines [into register x]         |
+| :[range]copy {addr}      | Copy the specified lines to below the line     |
+| :[range]move {addr}      | Move the specified lines to below the line     |
+| :[range]join             | Join the specified lines                       |
+| :g/fred/,/joe/j          | Join Lines [N]                                 |
+|                          |                                                |
+| :put b                   |                                                |
+| :10put x                 | put the text after line 10 from x register     |
+| :put =sytem('ls -l')     |                                                |
+| :put =execute('reg')     | put the output of the command into the buffer  |
+| :put =range(11,15)       | create a list of numbers in lines              |
+| :[line]put [x]           | Put the text from register x after the line    |
+|                          |                                                |
+| =============            |                                                |
+| Global                   |                                                |
+| =============            |                                                |
+| m  / move                | :g/pattern/m destination , :g/console/m $      |
+| t  / copy                | :g/pattern/t {address}                         |
+| pu / put                 | :g/pattern/pu {register}                       |
+|                          |                                                |
+| =============            |                                                |
+| Quickfix Plugin          |                                                |
+| =============            |                                                |
+| z<Tab>                   | clear the signs in current quickfix list       |
+| zo                       | scroll back to original postion in preview     |
+| zp                       | toggle preview window between normal/max size  |
+| p                        | toggle preview for an item of quickfix list    |
+| <C-q>                    | quit the fzf mode                              |
+|                          |                                                |
+| =============            |                                                |
+| Vim Essensial            |                                                |
+| =============            |                                                |
+| ctrl-p and ctrl-n        | cycle through command history                  |
+|                          |                                                |
+| =============            |                                                |
+| Folding                  |                                                |
+| =============            |                                                |
+| zi                       | switch folding on or off                       |
+| za                       | toggle current fold open/closed                |
+| zc                       | close current fold                             |
+| zR                       | open all folds                                 |
+| zM                       | close all folds                                |
+| zv                       | expand folds to reveal cursor                  |
+| zo                       | open current fold                              |
+| zO                       | recursively open current fold                  |
+| zc                       | close current fold                             |
+| zC                       | recursively close current fold                 |
+| za                       | toggle current fold                            |
+| zA                       | recursively open/close current fold            |
+| zm                       | reduce `foldlevel` by one                      |
+| zM                       | close all folds                                |
+| zr                       | increase `foldlevel` by one                    |
+| zR                       | open all folds                                 |
+| zj                       | move down to top of next fold                  |
+| zk                       | move up to bottom of previous fold             |
+| zMzv                     | has the effect of closing all open folds       |
+|                          | apart from the one that the cursor is on       |
+|                          |                                                |
+| =============            |                                                |
+| Language Stuff           |                                                |
+| =============            |                                                |
+| ]s                       | Go to the next misspelled word                 |
+| [s                       | Go to the last misspelled word                 |
+| z=                       | Get suggestions on a misspelled word           |
+| zg                       | Mark a misspelled word as correct              |
+| zw                       | Mark a good word as misspelled                 |
+|                          |                                                |
+| =============            |                                                |
+| Navigation               |                                                |
+| =============            |                                                |
+| )                        | move forward one sentence                      |
+| }                        | move forward one paragraph                     |
+| :e#                      | switch to the previous buffer                  |
+|                          |                                                |
+| =============            |                                                |
+| Command Mode             |                                                |
+| =============            |                                                |
+| :<C-r><C-w>              | the Word under the cursor                      |
+| :<C-r><C-f>              | the Filename under the cursor                  |
+| :<C-r><C-p>              | the Filename (path) under the cursor           |
+| :<C-r><C-a>              | the WORD under the cursor                      |
+| :<C-r><C-l>              | the line under the cursor                      |
+| :echo @%                 | def/my.txt                                     | directory/name of file (relative to the current working directory of /abc) |
+| :echo expand('%:t')      | my.txt                                         | name of file ('tail')                                                      |
+| :echo expand('%:p')      | /abc/def/my.txt                                | full path                                                                  |
+| :echo expand('%:p:h')    | /abc/def                                       | directory containing file ('head')                                         |
+|                          |                                                |
+| =============            |                                                |
+| Misc                     |                                                |
+| =============            |                                                |
+| 20 ctrl+w +              |                                                |
+| :tabm 0                  | move current tab to first position             |
+| :tabm                    | move current tab to last position              |
+| :tabm [i]                | move current tab to position [i]               |
+| :tabc                    | close current tab                              |
+| :tabo                    | close all other tabs                           |
+| :tabdo <command>         | run the command on all tabs                    |
+| :tabdo q                 | closes all tabs                                |
+| "ayy@a                   | execute Vim command in a text file             |
+| yy@"                     | same thing using unnamed register              |
+| <C-R>%                   | pull file name                                 |
+| :let @a=""               | clear register a                               |
+| :let @*=@a               | copy register a to paste buffer                |
+| :let @*=@                | : copy last command to paste buffer            |
+| :let @*=@/               | copy last search to paste buffer               |
+| :let @*=@%               | copy current filename to paste buffer          |
+| :scriptnames             | list all plugins, _vimrcs loaded (super)       |
+| :function                | list functions                                 |
+| :help :startup           | startup process documentation                  |
+| :scriptnames             | show scripts that are sourced                  |
+| :verbose hi Visual       |                                                |
+| :help  CTRL-W_CTRL-I     | normal mode mapping for <C-w><C-i>             |
+| :help key-notation       | to see important key notations                 |
+| :help map-notation       | to see important map notations                 |
+| :help internal-variables | to see information about variables             |
+| :tab help                | opens the help in a new tab                    |
+ 
+| :g/^/exe ".w ".line(".").".txt" | create a new file for each line of file |
+ 
+ 
+ 
+:.!seq 1000 | paste -d, - - - -
+:.!seq 1000 | paste $(printf -- "- \%.s" {1..24})
+:.!seq 10 | paste -sd,             => 1,2,3,4,5,6,7,8,9,10
+ 
+:%! sort -nrk 2 | column -t    * to sort on the second column by numbers do
+ 
+* :for i in range(1,10) | put ='192.168.0.'.i | endfor >> Create a list of IP addresses
+* :for i in range(1,10) | put =i | endfor      >> put 0,1,2,..,10 in the buffer
+* :g/pattern/# >> finds the pattern in the file, and prints them with their line numbers.
+ 
+ 
+To capture the output of a command into a register:
+   :redir @a
+   :set guicursor?
+   :redir END
+ 
+ 
+* (in terminal) to list all command-mode commands:
+    vim +'redir! > cmds | sil com' +q && cut -b5- cmds | cut -d ' ' -f 1
+    vim +'redir! > cmds | sil com' +q && cut -b5- cmds | fzf
+ 
+vim -i NONE ~/.local/share
+ 
+* To complete in help (:h CTRL-C): hit [[Ctrl-D]]
+* :h CTRL-R	Ctrl-R in normal mode
+:h i_CTRL-R	Ctrl-R in insert mode
+:h c_CTRL-R	Ctrl-R in command mode
+:h v_CTRL-V	Ctrl-V in visual mode
+ 
+-l is for only file names, -o is to  give back the stdin to vim
+grep 666 -l * | xargs -o vim
+ 
+ 
+function! FixQuickfixEntry()
+    " Example the line of the error to determine what fix is required.
+    let line = getline('.')
+    if line =~ 'as e:$'
+        " Handle scenario of unused exception variable
+        s/ as e:/:/
+    elseif line =~ '^\s\+\w\+ = factory'
+        " Handle scenario of unused test factory variable
+        normal _
+        normal 2dw
+    else
+        echom "Unable to fix"
+    endif
+endfunction
+ 
+then use:
+:cdo call FixQuickfixEntry()

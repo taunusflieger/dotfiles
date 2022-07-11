@@ -109,10 +109,20 @@ _G.packer_plugins = {
     path = "/home/michael/.local/share/nvim/site/pack/packer/start/fzf",
     url = "https://github.com/junegunn/fzf"
   },
+  ["hydra.nvim"] = {
+    loaded = true,
+    path = "/home/michael/.local/share/nvim/site/pack/packer/start/hydra.nvim",
+    url = "https://github.com/anuvyklack/hydra.nvim"
+  },
   ["impatient.nvim"] = {
     loaded = true,
     path = "/home/michael/.local/share/nvim/site/pack/packer/start/impatient.nvim",
     url = "https://github.com/lewis6991/impatient.nvim"
+  },
+  ["keymap-layer.nvim"] = {
+    loaded = true,
+    path = "/home/michael/.local/share/nvim/site/pack/packer/start/keymap-layer.nvim",
+    url = "https://github.com/anuvyklack/keymap-layer.nvim"
   },
   ["lspsaga.nvim"] = {
     loaded = true,

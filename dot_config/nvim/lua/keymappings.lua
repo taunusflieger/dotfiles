@@ -69,7 +69,9 @@ opt.mouse = 'a'                     -- Enable mouse scrolling
 -- Neovim shortcuts:
 -----------------------------------------------------------
 
--- clear search highlighting
+--clear search highlighting
+nmap('C-U', '<cmd>u<cr>')
+
 nmap('<leader>c', ':nohl<CR>')
 nmap('C-U', '<cmd>u<cr>')
 

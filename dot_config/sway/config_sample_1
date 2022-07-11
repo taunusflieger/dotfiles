@@ -1,0 +1,376 @@
+# Keyboard definition
+input "type:keyboard" {
+  xkb_layout us
+  xkb_variant intl
+  xkb_options "compose:rwin"
+}
+input "19266:13912:You_kbd6x" {
+  xkb_options "compose:rctrl"
+}
+input "1:1:AT_Translated_Set_2_keyboard" {
+  xkb_options "compose:rctrl"
+}
+
+# Touchpad definition
+input type:touchpad {
+  tap enabled
+}
+
+
+### Variables
+#
+
+# Logo key. Use Mod1 for Alt.
+set $mod Mod4
+
+# Displays
+set $thinkstation HDMI-A-3
+set $thinkstation-work "Iiyama North America PL2483H 1173700204528"
+set $thinkpad eDP-1
+set $thinkpad-work "Goldstar Company Ltd LG ULTRAWIDE 0x0000F6D7"
+set $work DP-1
+
+# Workspaces
+set $wksp1 "1: Main"
+set $wksp2 "2: Dev"
+set $wksp3 "3: Social"
+set $wksp4 "4: Music"
+set $wksp5 "5: Graphics"
+set $wksp6 "6: Games"
+set $wksp7 "7: Remote"
+set $wksp8 "8: Console"
+set $wksp9 "9: Databases"
+set $wksp10 "10: Debugger"
+
+# Colors
+set $nord0   #2E3440
+set $nord1   #3B4252
+set $nord2   #434C5E
+set $nord3   #4C566A
+set $nord4   #D8DEE9
+set $nord5   #E5E9F0
+set $nord6   #ECEFF4
+set $nord7   #8FBCBB
+set $nord8   #88C0D0
+set $nord9   #81A1C1
+set $nord10  #5E81AC
+set $nord11  #BF616A
+set $nord12  #D08770
+set $nord13  #EBCB8B
+set $nord14  #A3BE8C
+set $nord15  #B48EAD
+
+# Your preferred terminal emulator
+set $term /usr/bin/alacritty
+
+# Your preferred application launcher
+set $menu wofi -c ~/.config/wofi/config -s ~/.config/wofi/style.css -I
+
+# Screen capture
+set $ps1 Print
+set $ps2 Control+Print
+
+# Modals
+set $modalWidth 1280
+set $modalHeight 800
+
+# Gnome schema path
+set $gnome-schema org.gnome.desktop.interface
+
+
+### Screens definitions
+#
+
+# Thinkstation
+output $thinkstation resolution 3440x1440@100Hz position 0 0 adaptive_sync on
+output $thinkstation-work resolution 1920x1080@60Hz position 3440 0 transform 270 adaptive_sync on
+
+# Thinkpad
+output $thinkpad resolution 1920x1080 position 0 0
+output $thinkpad-work resolution 2560x1080 position 1920 0
+
+
+### Gnome settings
+#
+
+set $gnome-schema org.gnome.desktop.interface
+exec_always {
+    gsettings set $gnome-schema gtk-theme 'Nordic'
+    gsettings set $gnome-schema icon-theme 'NordArc-Icons'
+    gsettings set $gnome-schema cursor-theme 'ComixCursors-Opaque-White'
+    gsettings set $gnome-schema font-name 'Source Code Pro for Powerline 9'
+    gsettings set $gnome-schema monospace-font-name 'Source Code Pro for Powerline 9'
+    gsettings set $gnome-schema document-font-name 'Source Code Pro for Powerline 9'
+    gsettings set org.gnome.desktop.wm.preferences titlebar-font 'Source Code Pro for Powerline 9'
+    gsettings set org.gnome.desktop.wm.preferences button-layout ''
+    gsettings set org.gnome.desktop.default-applications.terminal exec $term
+    gsettings set org.gnome.desktop.default-applications.terminal exec-arg ''
+}
+
+
+### Idle configuration
+#
+
+exec swayidle -w \
+          timeout 300 'swaylock -f' \
+          timeout 305 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+          before-sleep 'swaylock -f'
+
+
+### Autostart
+#
+
+exec dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus
+exec gnome-keyring-daemon
+#exec /usr/bin/libinput-gestures
+#exec nm-applet --indicator
+exec kdeconnect-indicator
+exec mako
+exec nextcloud --background
+exec remmina -i
+exec $term
+exec firefox
+exec spotify
+exec signal-desktop --use-tray-icon
+exec teams
+exec mpd
+exec libinput-gestures-setup start
+# Set focus on main screen
+exec ~/bin/autoFocus.sh
+
+
+### Window config
+#
+
+for_window [app_id=".*"] border pixel 4
+
+# Auto move on Workspace
+for_window [class="Signal"] move container to workspace $wksp3
+for_window [class="Teams"] move container to workspace $wksp3
+for_window [class="Slack"] move container to workspace $wksp3
+for_window [class="Spotify"] move container to workspace $wksp4
+
+# Open as floating
+for_window [class="Geeqie"] floating enable
+for_window [class="com-sun-javaws-Main"] floating enable
+for_window [app_id="Alacritty" title="Pulse Mixer"] floating enable, resize set $modalWidth $modalHeight
+for_window [app_id="Alacritty" title="Calendar"] floating enable, resize set $modalWidth $modalHeight
+for_window [app_id="Alacritty" title="File Browser"] floating enable resize set $modalWidth $modalHeight
+for_window [app_id="Alacritty" title="Ncdu"] floating enable, resize set $modalWidth $modalHeight
+for_window [app_id="Alacritty" title="Top"] floating enable, resize set $modalWidth $modalHeight
+for_window [app_id="Alacritty" title="Audio Visualizer"] floating enable, resize set $modalWidth $modalHeight
+for_window [app_id="Alacritty" title="Music Player Client"] floating enable, resize set $modalWidth $modalHeight
+
+
+### Key bindings
+#
+
+# Start a terminal
+bindsym $mod+Return exec $term
+
+# Kill focused window
+bindsym control+q kill
+
+# Start your launcher
+bindsym Alt+space exec $menu
+
+# lock screen
+bindsym $mod+Alt+l exec swaylock -f
+
+# Reload the configuration file
+bindsym $mod+Shift+r reload
+
+# Exit sway (logs you out of your Wayland session)
+bindsym $mod+Shift+x exec swaynag -t warning -m 'End session?' -b 'Yes, exit sway' 'swaymsg exit'
+
+# File Browser
+bindsym $mod+f exec "$term -t 'File Browser' -e ranger"
+
+# Disk Usage
+bindsym $mod+Shift+f exec "$term -t 'Ncdu' -e 'ncdu --color=dark'"
+
+# Top
+bindsym $mod+t exec "$term -t 'Top' -e bpytop"
+
+# Calendar
+bindsym $mod+c exec "$term -t 'Calendar' -e khal interactive"
+
+# Dismiss last notification
+bindsym $mod+n exec makoctl dismiss
+# Do not disturb
+bindsym $mod+d exec "notify-send -i ~/icons/information.png 'Notification' 'Disabling notification…' && makoctl set-mode do-not-disturb"
+bindsym $mod+Shift+d exec "makoctl set-mode default && makoctl restore && notify-send -i ~/icons/information.png 'Notification' 'Notification enabled'"
+
+# Multimedia keys
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym --locked XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioPlay exec mpc toggle
+bindsym XF86AudioPrev exec mpc prev
+bindsym XF86AudioNext exec mpc next
+bindsym $mod+shift+p exec "$term -t 'Pulse Mixer' -e pulsemixer"
+bindsym $mod+shift+m exec "$term -t 'Music Player Client' -e ncmpcpp"
+bindsym $mod+shift+v exec "$term -t 'Audio Visualizer' -e cava"
+
+# Screen
+bindsym $mod+p exec "swaymsg output $work toggle"
+bindsym $mod+alt+p exec "swaymsg output $thinkpad toggle"
+
+#
+# Brightness
+bindsym XF86MonBrightnessDown exec brightnessctl s 64-
+bindsym XF86MonBrightnessUp exec brightnessctl s 64+
+
+# Screenshots
+bindsym $ps1 exec grim ~/Pictures/Screenshots/ps_$(date +"%Y%m%d%H%M%S").png
+bindsym $ps2 exec grim -g "$(slurp)" ~/Pictures/Screenshots/ps_selection_$(date +"%Y%m%d%H%M%S").png
+
+# Moving around:
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Move focussed workspace
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Workspaces:
+bindsym $mod+1 workspace $wksp1
+bindsym $mod+2 workspace $wksp2
+bindsym $mod+3 workspace $wksp3
+bindsym $mod+4 workspace $wksp4
+bindsym $mod+5 workspace $wksp5
+bindsym $mod+6 workspace $wksp6
+bindsym $mod+7 workspace $wksp7
+bindsym $mod+8 workspace $wksp8
+bindsym $mod+9 workspace $wksp9
+bindsym $mod+0 workspace $wksp10
+
+# switch to previous/next workspace
+bindsym Mod1+Control+a workspace prev_on_output
+bindsym Mod1+Control+d workspace next_on_output
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $wksp1
+bindsym $mod+Shift+2 move container to workspace $wksp2
+bindsym $mod+Shift+3 move container to workspace $wksp3
+bindsym $mod+Shift+4 move container to workspace $wksp4
+bindsym $mod+Shift+5 move container to workspace $wksp5
+bindsym $mod+Shift+6 move container to workspace $wksp6
+bindsym $mod+Shift+7 move container to workspace $wksp7
+bindsym $mod+Shift+8 move container to workspace $wksp8
+bindsym $mod+Shift+9 move container to workspace $wksp9
+bindsym $mod+Shift+0 move container to workspace $wksp10
+
+# Layout stuff:
+bindsym $mod+backslash splith
+bindsym $mod+minus splitv
+
+# Switch the current container between different layout styles
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Make the current focus fullscreen
+bindsym $mod+Mod1+f fullscreen
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
+
+# Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
+
+# Resizing containers
+bindsym $mod+r mode "resize"
+mode "resize" {
+  bindsym h resize shrink width 10px
+  bindsym j resize grow height 10px
+  bindsym k resize shrink height 10px
+  bindsym l resize grow width 10px
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+# Mode containers
+bindsym $mod+m mode "move"
+mode "move" {
+  bindsym h move left 10px
+  bindsym j move down 10px
+  bindsym k move up 10px
+  bindsym l move right 10px
+
+   bindsym Return mode "default"
+   bindsym Escape mode "default"
+}
+
+
+### Default placement
+#
+
+workspace $wksp1 output $thinkstation
+workspace $wksp2 output $thinkstation
+workspace $wksp3 output $thinkstation
+workspace $wksp4 output $thinkstation
+workspace $wksp5 output $thinkstation
+workspace $wksp6 output $thinkstation
+workspace $wksp7 output $thinkstation
+workspace $wksp8 output $thinkstation
+workspace $wksp9 output $work
+workspace $wksp10 output $work
+
+
+
+### Default workspace layout
+#
+
+workspace_layout tabbed
+
+
+### Status Bar:
+#
+
+bar {
+    swaybar_command waybar
+}
+
+
+### gaps
+#
+
+gaps inner 10
+gaps outer -5
+smart_gaps off
+
+
+### Titlebars
+#
+
+default_border pixel 4
+default_floating_border normal
+hide_edge_borders smart
+titlebar_padding 5 2
+
+
+### Colors
+#
+
+client.focused          $nord10 $nord0  $nord4  $nord10 $nord10
+client.focused_inactive $nord1  $nord1  $nord4  $nord3  $nord3
+client.unfocused        $nord2  $nord2  $nord4  $nord3  $nord3
+client.urgent           $nord11 $nord11 $nord4  $nord12 $nord12
+
+
+### Background
+#
+
+output * bg /home/dbroqua/.wallpaper fill
+
+
+### Include other
+#
+
+include /etc/sway/config.d/*,
