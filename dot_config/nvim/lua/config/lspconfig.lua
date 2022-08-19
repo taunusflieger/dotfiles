@@ -20,7 +20,6 @@ setup_auto_format("lua", "lua require('stylua-nvim').format_file()")
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-
 lspconfig.clangd.setup({})
 -- lspconfig.pylsp.setup({})
 
@@ -47,3 +46,9 @@ require("lspconfig").sumneko_lua.setup(luadev)
 
 vim.lsp.handlers["textDocument/codeAction"] =
   require("lsputil.codeAction").code_action_handler
+
+-- Disable virtual_text since it's redundant due to lsp_lines.
+vim.diagnostic.config({
+  virtual_text = true,
+  virtual_lines = true,
+})

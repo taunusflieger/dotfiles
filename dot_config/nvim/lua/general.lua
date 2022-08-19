@@ -6,6 +6,7 @@ vim.opt.wrap = false
 vim.opt.hidden = true
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
+vim.opt.fileformat = "unix"
 vim.opt.ruler = true
 vim.opt.cmdheight = 2
 vim.opt.iskeyword:append("-")
@@ -20,6 +21,7 @@ vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.autoindent = true
 vim.opt.number = true
+vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.background = "dark"
 vim.opt.showtabline = 4

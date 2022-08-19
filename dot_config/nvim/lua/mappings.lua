@@ -1,13 +1,13 @@
 local nnoremap = function(lhs, rhs, silent)
-  vim.api.nvim_set_keymap("n", lhs, rhs, { noremap = true, silent = silent })
+	vim.api.nvim_set_keymap("n", lhs, rhs, { noremap = true, silent = silent })
 end
 
 local inoremap = function(lhs, rhs)
-  vim.api.nvim_set_keymap("i", lhs, rhs, { noremap = true })
+	vim.api.nvim_set_keymap("i", lhs, rhs, { noremap = true })
 end
 
 local vnoremap = function(lhs, rhs)
-  vim.api.nvim_set_keymap("v", lhs, rhs, { noremap = true })
+	vim.api.nvim_set_keymap("v", lhs, rhs, { noremap = true })
 end
 
 -- smartquit
@@ -79,25 +79,39 @@ nnoremap("<Leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>", true)
 vnoremap("<Leader>a", "<cmd>lua vim.lsp.buf.range_code_action()<CR>")
 
 nnoremap("<Leader>ld", "<cmd>LspTrouble lsp_definitions<CR>", true)
-nnoremap(
-  "<Leader>le",
-  "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>",
-  true
-)
+nnoremap("<Leader>le", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", true)
 nnoremap("<Leader>lE", "<cmd>LspTroubleWorkspaceToggle<CR>", true)
 
 -- Telescope
 nnoremap("<C-f>", ':lua require("utils/telescope").search_files()<CR>')
 nnoremap("/", ':lua require("utils/telescope").search_in_buffer()<CR>')
-inoremap(
-  "<C-f>",
-  '<Esc> :lua require("utils/telescope").search_in_buffer()<CR>'
-)
-nnoremap(
-  "<Leader>fg",
-  '<Esc> :lua require("telescope.builtin").live_grep()<CR>'
-)
-nnoremap(
-  "<Leader>fd",
-  '<Esc> :lua require("utils/telescope").search_dotfiles()<CR>'
-)
+--inoremap(
+--  "<C-f>",
+--  '<Esc> :lua require("utils/telescope").search_in_buffer()<CR>'
+--)
+-- nnoremap(
+--  "<Leader>fg",
+--  '<Esc> :lua require("telescope.builtin").live_grep()<CR>'
+--)
+-- nnoremap(
+--  "<Leader>fd",
+--  '<Esc> :lua require("utils/telescope").search_dotfiles()<CR>'
+--)
+-- NvimTree
+nnoremap("<leader>n", "<cmd>NvimTreeToggle<cr>")
+
+-----------------------------------------------------------
+-- Telescope functions
+-----------------------------------------------------------
+nnoremap("<leader>fd", "<cmd>lua require('telescope.builtin').find_files()<cr>")
+nnoremap("<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
+nnoremap("<leader>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>")
+nnoremap("<leader>ft", "<cmd>lua require('telescope.builtin').git_files()<cr>")
+nnoremap("<leader>fh", "<cmd>lua require('telescope.builtin').help_tags()<cr>")
+
+-----------------------------------------------------------
+-- Rust
+-----------------------------------------------------------
+--- Show all diagnostics on current line in floating window
+nnoremap("<leader>d", "<cmd>lua vim.diagnostic.open_float()<CR>")
+nnoremap("<leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>")

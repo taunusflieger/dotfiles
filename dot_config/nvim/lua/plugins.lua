@@ -50,7 +50,12 @@ require("packer").startup(function(use)
   -- =====================
   -- lsp stuff
   use("neovim/nvim-lspconfig")
-
+  use({
+    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    config = function()
+      require("lsp_lines").setup()
+    end,
+  })
   -- completion plugin
   use("hrsh7th/nvim-cmp")
   use("hrsh7th/cmp-nvim-lsp")
