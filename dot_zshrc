@@ -1,3 +1,4 @@
+        
 # =============
 # Requires the following plugins installed in /usr/local/shared
 # git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf ~/.fzf/install
@@ -54,8 +55,6 @@ key[PageDown]=${terminfo[knp]}
 #    ALIAS
 # =============
 alias ..='cd ..'
-
-alias d='git diff'
 
 case `uname` in
   Darwin)
@@ -144,8 +143,8 @@ setopt hist_ignore_space
 setopt hist_verify
 setopt inc_append_history
 # share command history data
-# setopt share_history
-
+setopt share_history
+setopt auto_cd
 # =============
 #    PROMPT
 # =============
@@ -181,8 +180,8 @@ function git_prompt_info() {
 autoload -Uz compinit
 compinit
 
-autoload bashcompinit
-bashcompinit
+#autoload bashcompinit
+#bashcompinit
 
 zmodload -i zsh/complist
 
@@ -272,7 +271,7 @@ typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
 # ===================
 # brew install jump
 # https://github.com/gsamokovarov/jump
-eval "$(jump shell)"
+#eval "$(jump shell)"
 
 # ----------------------
 # Git Aliases
@@ -312,6 +311,15 @@ alias gstp='git stash pop'
 alias gsts='git stash save'
 alias edge='microsoft-edge-dev'
 alias -g nv='nvidia-smi'
+
+# suffix
+alias -s {html,HTML}='background google-chrome-stable'
+alias -s {zip,ZIP,war,WAR}="unzip -l"
+alias -s {jar,JAR}="java -jar"
+alias -s gz="tar -tf"
+alias -s {tgz,TGZ}="tar -tf"
+
+
 #export PATH=/usr/local/clang/bin:/usr/local/cuda/bin:/opt/ros/melodic/bin/catkin_make:$PATH
 #export PATH=$HOME/.githubcli/bin:$PATH
 #export PATH=$HOME/.local/bin:$HOME/.cargo/bin:$PATH
@@ -324,14 +332,14 @@ alias -g nv='nvidia-smi'
 #export CXX=/usr/bin/gcc
 #export GOPATH=~/go
 #export PATH=$PATH:$GOPATH
-export PYENV_ROOT=$HOME/.pyenv
-export PATH=$PATH:$PYENV_ROOT/bin
+#export PYENV_ROOT=$HOME/.pyenv
+#export PATH=$PATH:$PYENV_ROOT/bin
 #export PICO_SDK_PATH=/home/michael/Arduino/hardware/pico/rp2040/pico-sdk
 #export PICO_EXTRAS_PATH=/home/michael/Arduino/hardware/pico/rp2040/pico-extras
 export PICO_EXTRAS_PATH=/home/michael/src/pico/pico-extras
 export PICO_SDK_PATH=/home/michael/src/pico/pico-sdk
 export PATH=$PATH:/opt/cuda/bin:/opt/vivaldi:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/scripts
-export CUDAToolkit_ROOT=/opt/cuda
+#export CUDAToolkit_ROOT=/opt/cuda
 
 # Fix bug in Arduino 1.x IDE when running under swaywm
 export _JAVA_AWT_WM_NONREPARENTING=1 
@@ -356,7 +364,7 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export QT_SCALE_FACTOR=1.3
 
 #[ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit;}
-eval "$(pyenv init -)"
+#eval "$(pyenv init -)"
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
